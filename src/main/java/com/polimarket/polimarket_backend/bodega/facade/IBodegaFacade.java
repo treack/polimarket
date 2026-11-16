@@ -8,6 +8,9 @@ import com.polimarket.polimarket_backend.bodega.dto.ProductoInventarioDto;
  */
 public interface IBodegaFacade {
 
+    /** Consulta RF-02 con el nombre del producto; nombre nulo si no existe. */
+    com.polimarket.polimarket_backend.bodega.dto.DisponibilidadDto consultarDetalleDisponibilidad(Long productoId, int cantidad);
+
     /** Consulta de datos de producto para pedidos, sin exponer entidades persistentes. */
     java.util.Optional<com.polimarket.polimarket_backend.bodega.dto.ProductoPedidoDto> consultarProductoParaPedido(Long productoId);
 

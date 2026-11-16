@@ -26,7 +26,7 @@ class OpenApiTests {
             var json = JsonMapper.builder().build().readTree(documento.body());
             assertEquals("PoliMarket API", json.path("info").path("title").asText());
             var paths = json.path("paths");
-            assertEquals(7, paths.size());
+            assertEquals(8, paths.size());
             assertTrue(paths.path("/api/ventas/pedidos").has("post"));
             assertTrue(paths.path("/api/ventas/pedidos").has("get"));
             assertTrue(paths.path("/api/entregas/pedidos/{pedidoId}").has("post"));

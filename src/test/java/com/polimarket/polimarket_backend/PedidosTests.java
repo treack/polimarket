@@ -104,6 +104,7 @@ class PedidosTests {
         assertEquals(20, stocks.findByProductoId(primero).orElseThrow().getCantidad());
         assertEquals(0, salidas.count());
         assertEquals(EstadoPedido.PENDIENTE, ventas.listarPedidos(vendedorId).getFirst().estado());
+        assertTrue(http("/api/entregas/pedidos/pendientes", null).body().contains("\"id\":" + pedidoId));
         Producto actualizado = productos.findById(primero).orElseThrow();
         actualizado.setPrecio(new BigDecimal("9999.00"));
         productos.saveAndFlush(actualizado);
@@ -117,9 +118,33 @@ class PedidosTests {
         assertEquals(pedidoId, salidas.findByProductoId(primero).getFirst().getPedidoId());
         assertEquals(1, entregas.count());
         assertEquals(EstadoPedido.DESPACHADO, ventas.listarPedidos(vendedorId).getFirst().estado());
+        assertEquals("[]", http("/api/entregas/pedidos/pendientes", null).body());
         assertEquals(200, http("/api/ventas/pedidos?vendedorId=" + vendedorId, null).statusCode());
         assertEquals(409, http("/api/entregas/pedidos/" + pedidoId, java.util.Map.of()).statusCode());
         assertEquals(17, stocks.findByProductoId(primero).orElseThrow().getCantidad());
+    }
+
+    @Test
+    void entregasConsultaPendientesDeTodosLosVendedores() throws Exception {
+        var primeroCreado = ventas.crearPedido(solicitud());
+        Empleado empleado = new Empleado();
+        empleado.setActivo(true);
+        empleado = empleados.saveAndFlush(empleado);
+        Vendedor otroVendedor = new Vendedor();
+        otroVendedor.setEmpleado(empleado);
+        otroVendedor.setAutorizado(true);
+        Long otroId = vendedores.saveAndFlush(otroVendedor).getId();
+        var segundoCreado = ventas.crearPedido(new CrearPedidoDto(otroId, "Otro cliente", "Otra direccion", solicitud().detalles()));
+        var respuesta = http("/api/entregas/pedidos/pendientes", null);
+        assertEquals(200, respuesta.statusCode());
+        var pendientes = JsonMapper.builder().build().readTree(respuesta.body());
+        assertEquals(2, pendientes.size());
+        assertEquals(primeroCreado.id().longValue(), pendientes.get(0).path("id").asLong());
+        assertEquals(segundoCreado.id().longValue(), pendientes.get(1).path("id").asLong());
+        fachadaEntregas.registrarEntrega(primeroCreado.id());
+        var restantes = fachadaEntregas.listarPendientes();
+        assertEquals(1, restantes.size());
+        assertEquals(segundoCreado.id(), restantes.getFirst().id());
     }
 
     @Test

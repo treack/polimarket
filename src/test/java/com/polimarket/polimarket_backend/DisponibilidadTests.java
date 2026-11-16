@@ -61,6 +61,7 @@ class DisponibilidadTests {
             HttpResponse<String> disponible = consultar(productoId + "/disponibilidad?cantidad=10");
             assertEquals(200, disponible.statusCode());
             assertTrue(disponible.body().contains("\"disponible\":true"));
+            assertTrue(disponible.body().contains("\"nombreProducto\":\"Producto RF-02\""));
             assertTrue(consultar(productoId + "/disponibilidad?cantidad=11").body()
                     .contains("\"disponible\":false"));
             assertEquals(10, stocks.findByProductoId(productoId).orElseThrow().getCantidad());
@@ -72,10 +73,12 @@ class DisponibilidadTests {
             assertThrows(IllegalArgumentException.class, () -> fachada.consultarDisponibilidad(null, 1));
             stocks.deleteById(stock.getId());
             assertFalse(fachada.consultarDisponibilidad(productoId, 1));
+            assertEquals("Producto RF-02", fachada.consultarDetalleDisponibilidad(productoId, 1).nombreProducto());
             productos.deleteById(productoId);
             HttpResponse<String> inexistente = consultar(productoId + "/disponibilidad?cantidad=1");
             assertEquals(200, inexistente.statusCode());
             assertTrue(inexistente.body().contains("\"disponible\":false"));
+            assertNull(fachada.consultarDetalleDisponibilidad(productoId, 1).nombreProducto());
         } finally {
             stocks.findByProductoId(productoId).ifPresent(stocks::delete);
             if (productos.existsById(productoId)) productos.deleteById(productoId);

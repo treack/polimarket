@@ -2,6 +2,7 @@ package com.polimarket.polimarket_backend.entregas.facade;
 
 /** Contrato publico del componente Entregas. */
 public interface IEntregasFacade {
+    java.util.List<com.polimarket.polimarket_backend.ventas.dto.PedidoDto> listarPendientes();
     /** Registra el despacho de un pedido, su entrega y todas sus salidas atomicamente. */
     com.polimarket.polimarket_backend.entregas.dto.EntregaDto registrarEntrega(Long pedidoId);
 

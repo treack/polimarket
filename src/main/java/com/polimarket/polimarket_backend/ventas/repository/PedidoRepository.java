@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface PedidoRepository extends JpaRepository<Pedido, Long> {
+    @Query("select p from Pedido p where p.estado = com.polimarket.polimarket_backend.ventas.model.EstadoPedido.PENDIENTE or p.estado is null order by p.id")
+    List<Pedido> listarPendientes(org.springframework.data.domain.Pageable pagina);
     List<Pedido> findTop100ByVendedorIdOrderByIdDesc(Long vendedorId);
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select p from Pedido p where p.id = :pedidoId")

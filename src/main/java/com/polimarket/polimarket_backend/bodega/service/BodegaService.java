@@ -10,11 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class BodegaService {
     private final StockRepository stocks;
+    private final com.polimarket.polimarket_backend.bodega.repository.ProductoRepository productos;
     private final com.polimarket.polimarket_backend.bodega.repository.SalidaInventarioRepository salidas;
 
     public BodegaService(StockRepository stocks,
+            com.polimarket.polimarket_backend.bodega.repository.ProductoRepository productos,
             com.polimarket.polimarket_backend.bodega.repository.SalidaInventarioRepository salidas) {
         this.stocks = stocks;
+        this.productos = productos;
         this.salidas = salidas;
     }
 
@@ -66,5 +69,13 @@ public class BodegaService {
         return stocks.findByProductoId(productoId)
                 .map(stock -> stock.getCantidad() >= cantidad)
                 .orElse(false);
+    }
+
+    @Transactional(readOnly = true)
+    public com.polimarket.polimarket_backend.bodega.dto.DisponibilidadDto consultarDetalleDisponibilidad(Long productoId, int cantidad) {
+        boolean disponible = consultarDisponibilidad(productoId, cantidad);
+        String nombre = productos.findById(productoId).map(producto -> producto.getNombre()).orElse(null);
+        return new com.polimarket.polimarket_backend.bodega.dto.DisponibilidadDto(
+                productoId, cantidad, disponible, nombre);
     }
 }

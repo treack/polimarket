@@ -34,4 +34,8 @@ public class EntregasService {
     public boolean registrarSalidaProductos(Long productoId, int cantidad) {
         return bodega.registrarSalidaProductos(productoId, cantidad);
     }
+
+    public java.util.List<com.polimarket.polimarket_backend.ventas.dto.PedidoDto> listarPendientes() {
+        return ventas.listarPendientes();
+    }
 }

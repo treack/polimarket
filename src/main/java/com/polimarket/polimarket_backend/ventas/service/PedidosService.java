@@ -88,6 +88,12 @@ public class PedidosService {
         return pedidos.findTop100ByVendedorIdOrderByIdDesc(vendedorId).stream().map(this::dto).toList();
     }
 
+    @Transactional(readOnly = true)
+    public List<PedidoDto> listarPendientes() {
+        return pedidos.listarPendientes(org.springframework.data.domain.PageRequest.of(0, 100))
+                .stream().map(this::dto).toList();
+    }
+
     @Transactional(propagation = Propagation.MANDATORY)
     public PedidoDto despacharPedido(Long pedidoId) {
         if (pedidoId == null || pedidoId <= 0) throw new IllegalArgumentException("El ID del pedido debe ser positivo.");

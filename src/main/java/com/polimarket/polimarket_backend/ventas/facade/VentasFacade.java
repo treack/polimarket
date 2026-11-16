@@ -36,4 +36,9 @@ public class VentasFacade implements IVentasFacade {
                         producto.id(), producto.nombre(), producto.existencias()))
                 .toList();
     }
+
+    @Override
+    public List<com.polimarket.polimarket_backend.ventas.dto.PedidoDto> listarPendientes() {
+        return pedidos.listarPendientes();
+    }
 }

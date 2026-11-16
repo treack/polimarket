@@ -38,4 +38,9 @@ public class BodegaFacade implements IBodegaFacade {
     public boolean consultarDisponibilidad(Long productoId, int cantidad) {
         return bodega.consultarDisponibilidad(productoId, cantidad);
     }
+
+    @Override
+    public com.polimarket.polimarket_backend.bodega.dto.DisponibilidadDto consultarDetalleDisponibilidad(Long productoId, int cantidad) {
+        return bodega.consultarDetalleDisponibilidad(productoId, cantidad);
+    }
 }

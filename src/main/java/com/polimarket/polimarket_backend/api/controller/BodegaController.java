@@ -37,8 +37,7 @@ public class BodegaController {
     public DisponibilidadDto consultarDisponibilidad(
             @PathVariable("productoId") Long productoId,
             @RequestParam("cantidad") int cantidad) {
-        return new DisponibilidadDto(productoId, cantidad,
-                bodega.consultarDisponibilidad(productoId, cantidad));
+        return bodega.consultarDetalleDisponibilidad(productoId, cantidad);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

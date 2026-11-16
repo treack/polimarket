@@ -24,6 +24,12 @@ public class EntregasController {
 
     public EntregasController(IEntregasFacade entregas) { this.entregas = entregas; }
 
+    @Operation(summary = "Pedidos pendientes para Entregas", description = "Hasta 100 pedidos pendientes de todos los vendedores, del mas antiguo al mas reciente.")
+    @GetMapping("/pedidos/pendientes")
+    public java.util.List<com.polimarket.polimarket_backend.ventas.dto.PedidoDto> listarPendientes() {
+        return entregas.listarPendientes();
+    }
+
     @Operation(summary = "Registrar entrega y salida de un pedido", description = "Registra el despacho y descuenta todos los productos en una transaccion. Un pedido solo puede despacharse una vez. No representa confirmacion de recepcion del cliente.")
     @PostMapping("/pedidos/{pedidoId}")
     public ResponseEntity<com.polimarket.polimarket_backend.entregas.dto.EntregaDto> registrarEntrega(

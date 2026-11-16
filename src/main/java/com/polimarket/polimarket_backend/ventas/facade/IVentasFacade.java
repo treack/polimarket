@@ -5,6 +5,8 @@ import java.util.List;
 
 /** Contrato publico del componente Ventas. */
 public interface IVentasFacade {
+    /** Pedidos pendientes de todos los vendedores para el personal de entregas. */
+    List<com.polimarket.polimarket_backend.ventas.dto.PedidoDto> listarPendientes();
 
     com.polimarket.polimarket_backend.ventas.dto.PedidoDto crearPedido(com.polimarket.polimarket_backend.ventas.dto.CrearPedidoDto solicitud);
     List<com.polimarket.polimarket_backend.ventas.dto.PedidoDto> listarPedidos(Long vendedorId);

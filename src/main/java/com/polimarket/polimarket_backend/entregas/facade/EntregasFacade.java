@@ -18,4 +18,9 @@ public class EntregasFacade implements IEntregasFacade {
     public boolean registrarSalidaProductos(Long productoId, int cantidad) {
         return entregas.registrarSalidaProductos(productoId, cantidad);
     }
+
+    @Override
+    public java.util.List<com.polimarket.polimarket_backend.ventas.dto.PedidoDto> listarPendientes() {
+        return entregas.listarPendientes();
+    }
 }
