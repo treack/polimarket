@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PoliMarket · Portal de vendedores</title>
+  <meta name="description" content="Consulta los productos y su disponibilidad en PoliMarket.">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="PoliMarket, inicio"><span class="brand-icon" aria-hidden="true">P</span>PoliMarket<span class="brand-dot">.</span></a>
+    <span class="portal-label">PORTAL DE VENDEDORES</span>
+  </header>
+  <main>
+    <section class="intro">
+      <p class="eyebrow">TU PUNTO DE VENTA, EN ORDEN</p>
+      <h1>Todo listo para<br><span>tu próxima venta.</span></h1>
+      <p class="intro-copy">Valida tu autorización y consulta los productos disponibles antes de ofrecerlos a tus clientes.</p>
+    </section>
+
+    <div class="workspace">
+      <aside class="side-column">
+        <section class="card" aria-labelledby="seller-title">
+          <p class="step">01 / VENDEDOR</p>
+          <h2 id="seller-title">Valida tu autorización</h2>
+          <p class="muted">Ingresa tu identificador de vendedor para continuar con la consulta.</p>
+          <form id="seller-form">
+            <label for="seller-id">ID del vendedor</label>
+            <input id="seller-id" name="vendedorId" type="number" min="1" step="1" required placeholder="Ej. 1" autocomplete="off">
+            <button id="validate-button" type="submit">Validar vendedor <span aria-hidden="true">→</span></button>
+          </form>
+          <p id="seller-status" class="status" role="status" aria-live="polite">Pendiente de validación.</p>
+        </section>
+        <section class="tip">
+          <span class="tip-symbol" aria-hidden="true">i</span>
+          <div><h2>Consulta antes de vender</h2><p>La disponibilidad puede cambiar. Consultar un producto no reserva ni descuenta unidades.</p></div>
+        </section>
+      </aside>
+
+      <section class="card catalog" aria-labelledby="catalog-title">
+        <div class="section-heading"><div><p class="step">02 / CATÁLOGO</p><h2 id="catalog-title">Productos disponibles</h2></div><span id="product-count" class="count">—</span></div>
+        <p class="muted">Explora el inventario y verifica la cantidad que necesita tu cliente.</p>
+        <div class="catalog-tools">
+          <label class="search-label" for="search">Buscar producto<input id="search" type="search" placeholder="Nombre o ID del producto" disabled></label>
+          <button id="refresh-button" class="secondary" type="button" disabled>Actualizar</button>
+        </div>
+        <p id="catalog-status" class="status" role="status" aria-live="polite">Valida un vendedor autorizado para cargar el catálogo.</p>
+        <div class="table-wrap">
+          <table>
+            <caption class="sr-only">Productos con existencias disponibles</caption>
+            <thead><tr><th scope="col">Producto</th><th scope="col">Existencias</th><th scope="col"><span class="sr-only">Acción</span></th></tr></thead>
+            <tbody id="product-list"></tbody>
+          </table>
+        </div>
+
+        <section id="availability-panel" class="availability" aria-labelledby="availability-title" hidden>
+          <p class="step">03 / DISPONIBILIDAD</p>
+          <h3 id="availability-title">Consulta una cantidad</h3>
+          <p id="selected-product" class="muted"></p>
+          <form id="availability-form" class="quantity-form">
+            <div><label for="quantity">Cantidad solicitada</label><input id="quantity" type="number" min="1" step="1" required value="1"></div>
+            <button id="availability-button" type="submit">Consultar disponibilidad</button>
+          </form>
+          <p id="availability-status" class="status" role="status" aria-live="polite"></p>
+          <button id="add-to-order" type="button" class="secondary">Agregar esta cantidad al pedido</button>
+        </section>
+      </section>
+    </div>
+    <section id="orders-workspace" class="orders-workspace" hidden>
+      <section class="card" aria-labelledby="order-title">
+        <p class="step">04 / PEDIDO</p>
+        <h2 id="order-title">Prepara el pedido</h2>
+        <p class="muted">Agrega productos desde el catálogo. El stock se descontará al registrar la entrega y salida.</p>
+        <div id="cart-items" aria-live="polite"></div>
+        <form id="order-form">
+          <div class="order-fields">
+            <div><label for="customer">Nombre del cliente</label><input id="customer" required maxlength="150" placeholder="Nombre completo" autocomplete="name"></div>
+            <div><label for="delivery-address">Dirección de entrega</label><input id="delivery-address" required maxlength="255" placeholder="Dirección completa" autocomplete="street-address"></div>
+          </div>
+          <button id="create-order" type="submit" disabled>Crear pedido</button>
+        </form>
+        <p id="order-status" class="status" role="status" aria-live="polite"></p>
+      </section>
+      <section class="card" aria-labelledby="orders-title">
+        <div class="section-heading"><div><p class="step">05 / ENTREGA Y SALIDA</p><h2 id="orders-title">Pedidos del vendedor</h2></div><button id="refresh-orders" type="button" class="secondary">Actualizar pedidos</button></div>
+        <p class="muted">Registrar la entrega genera el despacho y descuenta los productos. No confirma la recepción del cliente.</p>
+        <p id="orders-status" class="status" role="status" aria-live="polite"></p>
+        <div id="orders-list"></div>
+      </section>
+    </section>
+    <footer><span>PoliMarket</span><span>Inventario claro. Ventas con confianza.</span></footer>
+  </main>
+</body>
+</html>
